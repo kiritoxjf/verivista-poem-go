@@ -62,7 +62,11 @@ var db *sql.DB
 // 设置日志输出
 func setLogOutPut() error {
 	// 打开或创建日志文件
-	file, err := os.OpenFile("logger/error.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	logFilePath := os.Getenv("POEM_LOG_PATH")
+	if logFilePath == "" {
+		logFilePath = "logger/poem.log"
+	}
+	file, err := os.OpenFile(logFilePath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
 		return fmt.Errorf("[Open Log File Error]: %v", err)
 	}
@@ -74,7 +78,10 @@ func setLogOutPut() error {
 
 // 获取配置信息
 func getConfig() (Config, error) {
-	configPath := "config/config.json"
+	configPath := os.Getenv("POEM_CONFIG_PATH")
+	if configPath == "" {
+		configPath = "config/config.json"
+	}
 	jsonData, err := os.ReadFile(configPath)
 	if err != nil {
 		return Config{}, fmt.Errorf("[Config File Error or Not Exist]: %v", err)
@@ -226,6 +233,7 @@ func main() {
 
 	// 启动 Cron
 	c.Start()
+	logrus.Infoln("Poem EXE START;")
 
 	// 阻塞主 goroutine，以保持程序运行
 	select {}
