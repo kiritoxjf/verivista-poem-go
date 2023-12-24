@@ -7,6 +7,7 @@
 // config.json
 {
   "token": "", // 今日诗词开放API获取
+  "time": "0 0 0 * *",  // cron表达式 "秒 分 时 日 周" 每日0点执行
   "db": {
     "ip_addr": "",
     "port": "",

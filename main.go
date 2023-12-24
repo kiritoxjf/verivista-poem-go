@@ -24,6 +24,7 @@ type DB struct {
 
 type Config struct {
 	Token string `json:"token"`
+	Time  string `json:"time"`
 	DB    DB
 }
 
@@ -216,8 +217,8 @@ func main() {
 
 	// 创建一个新的 Cron 实例
 	c := cron.New()
-	// 每天0/12点获取新的诗写入数据库
-	err = c.AddFunc("0 0 */12 * *", func() {
+	// 每天双数小时点获取新的诗写入数据库
+	err = c.AddFunc(config.Time, func() {
 		logrus.Infoln("Start Get Poem!")
 		err = getPoem(config.Token)
 		if err != nil {
